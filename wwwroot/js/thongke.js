@@ -1,8 +1,9 @@
 $(document).ready(function () {
     let thang = $("#thang").val();
     let nam = $("#nam").val();
-
+    
     getData(thang, nam);
+    thongke();
 });
 
 
@@ -87,6 +88,30 @@ function changeData(){
             document.getElementById("div_chart").innerHTML = "";
             document.getElementById("div_chart").innerHTML = '<canvas id="myChart"></canvas>';
             loadData(result);
+        },
+        error: function () {
+            alert('Failed to receive the Data');
+        }
+    });
+}
+
+function thongke(){
+    let thang = $("#thang").val();
+    let nam = $("#nam").val();
+    $.ajax({
+        type: 'GET',
+        url: '/Admin/MyAdmin/layThongKe2',
+        // data: {
+        //     thang: thang,
+        //     nam: nam
+        // },
+        success: function (result) {
+            console.log(result);
+            document.getElementById("thanhcong").innerHTML = result.thanhCong;
+            document.getElementById("thatbai").innerHTML = result.thatBai;
+            document.getElementById("tong").innerHTML = result.tong;
+            // document.getElementById("div_chart").innerHTML = '<canvas id="myChart"></canvas>';
+            // loadData(result);
         },
         error: function () {
             alert('Failed to receive the Data');

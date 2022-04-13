@@ -10,6 +10,21 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="~/js/thongke.js"></script>
 }
+<style>
+    .label {
+        font-size: 16px;
+        background-color: red;
+        padding: auto;
+        margin: 10px;
+        color: #fff;
+        text-align: center;
+        align-items: center;
+    }
+    .label div {
+
+        font-size: 30px;
+    }
+</style>
 <h2>Đây là trang quản trị dành riêng cho admin!</h2>
 
 <div>
@@ -36,5 +51,25 @@
     </select>
     <div id="div_chart">
         <canvas id="myChart"></canvas>
+    </div>
+</div>
+<div style="display: flex;">
+    <div class="label">
+        Tổng số đơn hàng thành công
+        <div id="thanhcong">
+
+        </div>
+    </div>
+    <div class="label">
+        Tổng số đơn hàng bị hủy
+        <div id="thatbai">
+
+        </div>
+    </div>
+    <div class="label">
+        Tổng số sản phẩm đã bán
+        <div id="tong">
+
+        </div>
     </div>
 </div>

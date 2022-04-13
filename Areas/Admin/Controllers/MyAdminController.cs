@@ -20,9 +20,11 @@ namespace web_bh.Areas_Admin_Controllers
         {
             _context = context;
         }
+
         public IActionResult Index(){
             return View();
         }
+
         [HttpPost]
         public async Task<JsonResult> layThongKe(int thang, int nam)
         {
@@ -71,6 +73,50 @@ namespace web_bh.Areas_Admin_Controllers
                 });
                 
 
+            }
+
+        }
+
+
+
+
+
+        [HttpGet]
+        public async Task<JsonResult> layThongKe2()
+        {
+            bool isAdmin = HttpContext.Session.GetInt32("role") == 1? true: false;
+            if(!isAdmin)
+            {
+                return Json(new {
+                    message = "Bạn phải là admin mới sử dụng được chức năng này!",
+                    position = "0"
+                });
+            }else
+            {
+                
+                int thanhCong, thatBai, tong;
+                List<Order> orders = _context.Orders.Include(x => x.OrderDetails.OrderBy(p => p.Id)).ToList();   
+                thanhCong = 0;
+                tong = 0;
+                thatBai = 0;
+                foreach (Order item in orders)
+                {
+                    if(item.IdStatus == 3){
+                        thanhCong++;
+                        foreach (var item_2 in item.OrderDetails)
+                        {
+                            tong += (int)item_2.Num;
+                        }
+                    }
+                    else if(item.IdStatus == 4){
+                        thatBai++;
+                    }
+                }
+                return Json(new {
+                    thanhCong = thanhCong,
+                    thatBai = thatBai,
+                    tong = tong,
+                });
             }
 
         }

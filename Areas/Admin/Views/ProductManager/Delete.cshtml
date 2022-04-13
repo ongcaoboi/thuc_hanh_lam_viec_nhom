@@ -1,0 +1,64 @@
+@model web_bh.Models.Product
+
+@{
+    ViewData["Title"] = "Xoá sản phẩm";
+    Layout = "_Layout";
+}
+
+<h1>Xoá</h1>
+
+<h3>Bạn có thật sự muốn xoá sản phẩm này không?</h3>
+<div>
+    <h4>Sản phẩm</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @* @Html.DisplayNameFor(model => model.Title) *@
+            <p>Tên</p>
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class = "col-sm-2">
+            @* @Html.DisplayNameFor(model => model.Price) *@
+            <p>Giá</p>
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt class = "col-sm-2">
+            @* @Html.DisplayNameFor(model => model.Thumbnail) *@
+            <p>Ảnh nền</p>
+        </dt>
+        <dd class = "col-sm-10">
+            <img src="~/img/product/@Html.DisplayFor(model => model.Thumbnail)" alt="Hình ảnh @Html.DisplayFor(model => model.Title)">
+        </dd>
+        <dt class = "col-sm-2">
+            @* @Html.DisplayNameFor(model => model.Description) *@
+            <p>Mô tả</p>
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            @* @Html.DisplayNameFor(model => model.Quantity) *@
+            <p>Số lượng</p>
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+        <dt class = "col-sm-2">
+            @* @Html.DisplayNameFor(model => model.IdCategoryNavigation) *@
+            <p>Danh mục</p>
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IdCategoryNavigation.Name)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Xoá" class="btn btn-danger" /> |
+        <a asp-action="Index">Quay lại</a>
+    </form>
+</div>

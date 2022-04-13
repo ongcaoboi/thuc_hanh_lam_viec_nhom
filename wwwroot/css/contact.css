@@ -1,0 +1,19 @@
+.container {
+  align-items: center;
+  text-align: center;
+}
+.container > h1 {
+  margin-top: 100px;
+}
+.container > div {
+  margin: 50px 0;
+}
+.container > div > p {
+  margin-top: 10px; 
+  font-size: 18px;
+}
+.container > iframe {
+  width: 90%;
+  height: 500px;
+  margin-bottom: 50px;
+}

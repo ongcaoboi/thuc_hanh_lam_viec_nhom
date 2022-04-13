@@ -1,0 +1,79 @@
+@model IEnumerable<web_bh.Models.Product>
+
+@{
+    ViewData["Title"] = "Danh sách sản phẩm";
+    Layout = "_Layout";
+}
+
+<h1>Danh sách sản phẩm</h1>
+<div style="display: flex; justify-content: space-between;">
+    <p>
+        <a asp-action="Create" class="btn btn-success">Tạo mới</a>
+    </p>
+    <form asp-action="Index" style="display: flex; justify-content: space-between;">
+        <input type="search" class="form-control" placeholder="Nhập tên" name="q">
+        <div class="m-2"></div>
+        <input type="submit" value="Tìm" class="btn btn-primary">
+    </form>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @* @Html.DisplayNameFor(model => model.Title) *@
+                <p>Tên</p>
+            </th>
+            <th>
+                @* @Html.DisplayNameFor(model => model.Price) *@
+                <p>Giá</p>
+            </th>
+            <th>
+                @* @Html.DisplayNameFor(model => model.Thumbnail) *@
+                <p>Ảnh nền</p>
+            </th>
+            <th>
+                @* @Html.DisplayNameFor(model => model.Description) *@
+                <p>Mô tả</p>
+            </th>
+            <th>
+                @* @Html.DisplayNameFor(model => model.Quantity) *@
+                <p>Số lượng</p>
+            </th>
+            <th>
+                @* @Html.DisplayNameFor(model => model.IdCategoryNavigation) *@
+                <p>Danh mục</p>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                <img style="width: 150px;" src="~/img/product/@Html.DisplayFor(modelItem => item.Thumbnail)" alt="Hình ảnh @Html.DisplayFor(modelItem => item.Title)">
+                @* @Html.DisplayFor(modelItem => item.Thumbnail) *@
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdCategoryNavigation.Name)
+            </td>
+            <td>
+                <a asp-action="Edit" class="btn btn-primary w-100 p-6" asp-route-id="@item.Id">Sửa</a>
+                <a asp-action="Details" class="btn btn-info w-100 p-1" asp-route-id="@item.Id">Chi tiết</a>
+                <a asp-action="Delete" class="btn btn-danger w-100 p-1" asp-route-id="@item.Id">Xoá</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

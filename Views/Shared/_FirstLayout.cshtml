@@ -1,0 +1,225 @@
+@using Newtonsoft.Json
+@inject web_bhContext dbContext
+@inject CartContext cartContext
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+  List<Category> catergory_ls = dbContext.Categories.ToList();
+  bool isLogin = false;
+  int numCart = 0;
+  User user = new User();
+  if(HttpContextAccessor.HttpContext.Session.GetInt32("user") != null){
+    int? idUser = (Int32)HttpContextAccessor.HttpContext.Session.GetInt32("user");
+    var cart = cartContext.getCartData((int)idUser);
+    foreach(var item in cart.cartItems.ToList())
+    {
+      numCart += item.quantity;
+    }
+    @* numCart = cart.cartItems.Count(); *@
+    user = dbContext.Users.Where(p => p.Id.Equals(idUser)).FirstOrDefault();
+    isLogin = true;
+  }
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<!-- Nhúng các file css cho trang web -->
+  <link rel="stylesheet" href="~/css/main.css" />
+
+  @RenderSectionAsync("css", required: false)
+
+<!--  -->
+  <title>@ViewData["Title"] | PN Shop</title>
+</head>
+
+<body>
+@if(isLogin){
+    
+  <div class="account" id="repass">
+    <div>
+      <div></div>
+      <button class="btn btn-strest" onclick="hideRepass()">x</button>
+    </div>
+    <form>
+      <h1>Đổi mật khẩu</h1>
+      <input type="password" placeholder="Nhập mật khẩu cũ" id="old_pass">
+      <input type="password" placeholder="Nhập mật khẩu mới" id="new_pass">
+      <input type="password" placeholder="Nhập lại mật khẩu mới" id="renew_pass">
+      <input type="button" id="repass_submit" class="btn btn-green" value="Đổi mật khẩu">
+    </form>
+  </div>
+}else
+{
+  <div class="account" id="login">
+    <div>
+      <div></div>
+      <button class="btn btn-strest" onclick="hideLogin()">x</button>
+    </div>
+    <form>
+      <h1>Đăng nhập</h1>
+      <input type="text" placeholder="Tài khoản" id="login_name">
+      <input type="password" placeholder="*******" id="login_pass">
+      <div>
+        <input id="login_checkSave" type="checkbox"><label for="checkSave">Lưu đăng nhập</label>
+      </div>
+      <input type="button" id="login_submit" class="btn btn-green" value="Đăng nhập">
+    </form>
+  </div>
+  <div class="account" id="register">
+    <div>
+      <div></div>
+      <button class="btn btn-strest" onclick="hideRegister()">x</button>
+    </div>
+    <form>
+      <h1>Register</h1>
+      <input type="text" placeholder="Tài khoản" id="register_name">
+      <input type="password" placeholder="Mật khẩu" id="register_pass">
+      <input type="password" placeholder="Nhập lại mật khẩu" id="register_repass">
+      <input type="text" placeholder="Họ tên" id="register_fullname">
+      <input type="text" placeholder="Số điện thoại" id="register_sdt">
+      <input type="text" placeholder="Email" id="register_email">
+      <input type="button" id="register_submit" class="btn btn-green" value="Đăng ký">
+    </form>
+  </div>
+}
+  <button id="btn_go_to_top">Top</button>
+@if(isLogin){
+  <a asp-controller="Cart" asp-action="Index" class="btn__cart">
+    <img src="~/img/cart.png" alt="">
+    <span>@numCart</span>
+  </a>
+}
+<!-- Bắt đầu phần menu header -->
+  <nav class="header">
+    <a asp-controller="Home" asp-action="Index">PN Shop</a>
+    <div class="header__right">
+      <div>
+        <a asp-controller="Home" asp-action="Index">Trang chủ</a>
+        <span></span>
+      </div>
+      <div id="list-category">
+        <a>Danh mục</a>
+        <span></span>
+        <div class="header__list">
+          <ul>
+            <li>
+              <a asp-controller="Product" asp-action="Index">Tất cả</a>
+              <span></span>
+            </li>
+          @foreach (var item in catergory_ls)
+          { 
+            <li>
+              <a href="/Product?id=@item.Id">@item.Name</a>
+              <span></span>
+            </li>
+          }
+          </ul>
+        </div>
+      </div>
+      <div>
+        <a asp-controller="Contac" asp-action="Index">Liên hệ</a>
+        <span></span>
+      </div>
+      <div id="list-account">
+        @if(isLogin){
+          <a>@user.DisName</a>
+        }else{
+          <a>Tài khoản</a>
+        }
+        <span></span>
+        <div class="header__list">
+          <ul>
+          @if(!isLogin){
+            <li>
+              <a onclick="showLogin()">Đăng nhập</a>
+              <span></span>
+            </li>
+            <li>
+              <a onclick="showRegister()">Đăng ký</a>
+              <span></span>
+            </li>
+          }else
+          {
+            <li>
+              <a asp-controller="Cart" asp-action="Index">Giỏ hàng</a>
+              <span></span>
+            </li>
+            <li>
+              <a asp-controller="MyOrder" asp-action="Index">Đơn hàng</a>
+              <span></span>
+            </li>
+            <li>
+              <a onclick="showRepass()">Đổi mật khẩu</a>
+              <span></span>
+            </li>
+            <li>
+              <a href="/Home/Logout">Đăng xuất</a>
+              <span></span>
+            </li>
+          }
+        @if(isLogin){
+          if(user.IdRole == 1){
+          <li>
+            <a asp-area="Admin" asp-controller="MyAdmin" asp-action="Index">Quản trị</a>
+            <span></span>
+          </li>
+          }
+        }
+          </ul>
+        </div>
+      </div>
+      <div id="list-search">
+        <a>Tìm kiếm</a>
+        <span></span>
+        <form action="/Product/Search" class="header__search" method="get">
+          <input class="search__content" type="text" name="q" maxlength="200">
+          <input type="submit" value="Tìm">
+        </form>
+      </div>
+    </div>
+  </nav>
+<!-- Kết thúc phần menu header -->
+
+<!-- Mở đầu phần nội dung trang web -->
+  <div class="container">
+    @RenderBody()
+  </div>
+<!-- Kết thúc phần nội dung trang web -->
+
+<!-- Mở đầu phần footer -->
+  <footer class="footer">
+    <div class="footer__item">
+      <h2>Giới thiệu</h2>
+      <p>Website chuyên cung cấp các phụ kiện máy tính</p>
+    </div>
+    <div class="footer__item">
+      <h2>Sản phẩm</h2>
+      <div>
+          @foreach (var item in catergory_ls)
+          { 
+        <a href="/Product?id=@item.Id">@item.Name</a>
+          }
+      </div>
+    </div>
+    <div class="footer__item">
+      <h2>Liên hệ</h2>
+      <div>
+        <p>Địa chỉ: <a href="https://goo.gl/maps/C8Q69RJWWofJnb2m9" target="_blank">170 An Dương Vương, TP Quy Nhơn, Bình Định</a></p>
+        <p>SĐT: <a href="tel:0987654321">0987654321</a></p>
+        <p>Fanpage: <a href="https://www.facebook.com/dhquynhon" target="_blank">https://www.facebook.com/dhquynhon</a></p>
+      </div>
+    </div>
+  </footer>
+<!-- Kết thúc phần footer -->
+  <!-- Nhúng các file javascript -->
+  <script src="~/js/script.js"></script>
+  <script src="~/js/index.js"></script>
+  @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

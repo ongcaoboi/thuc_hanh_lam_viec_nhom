@@ -1,0 +1,75 @@
+﻿@model IEnumerable<web_bh.Models.Category>
+@{
+    ViewData["Title"] = "Trang chủ";
+}
+@section css {
+    <link rel="stylesheet" href="~/css/home.css">
+}
+    <div class="slider">
+      <img src="~/img/banner.png" alt="Ảnh slider">
+      <a asp-controller="Product" asp-action="Index" class="slider__text">Xem sản phẩm</a>
+    </div>
+    <div class="news">
+      <h2>Sản phẩm mới</h2>
+      <div class="row">
+      @{
+        foreach (var item in ViewBag.ls_prd_new)
+        {
+        <div class="row__item">
+          <div class="row__item--img">
+            <img src="~/img/product/@item.thumb" alt="Ảnh bàn phím">
+            <div class="product__hover">
+              <a href="/Product/Details?id=@item.id">Xem</a>
+              <a><img src="~/img/cart.png" alt=""></a>
+            </div>
+          @if(item.quantity == 0)
+          {
+            <div class="product__over">
+              <a>Hết hàng</a>
+            </div>
+          }
+          </div>
+          <div>
+            <p>@item.nameCate</p>
+            <a href="/Product/Details?id=@item.id">@item.title</a>
+            <h2>@string.Format("{0:0,0}", item.price) VND</h2>
+          </div>
+        </div>
+        }
+      }
+      </div>
+    </div>
+    <div class="category">
+    @foreach ( var item in ViewBag.ls_cate)
+    {
+      <div class="category__item">
+        <h2>@item.Name</h2>
+        <div class="row">
+        @foreach (var i in item.Products)
+        {
+          <div class="row__item">
+            <div class="row__item--img">
+              <img src="~/img/product/@i.Thumbnail" alt="Ảnh bàn phím">
+              <div class="product__hover">
+                <a href="/Product/Details?id=@i.Id">Xem</a>
+                <a><img src="~/img/cart.png" alt=""></a>
+              </div>
+            @if(i.Quantity == 0)
+            {
+              <div class="product__over">
+                <a>Hết hàng</a>
+              </div>
+            }
+            </div>
+            <div>
+              <p>@item.Name</p>
+              <a href="/Product/Details?id=@i.Id">@i.Title</a>
+              <h2>@string.Format("{0:0,0}", i.Price) VND</h2>
+            </div>
+          </div>
+        }
+        </div>
+        <a href="Product?id=@item.Id">>>Xem thêm</a>
+      </div>
+    }
+    </div>

@@ -1,0 +1,118 @@
+@model web_bh.Models.Product
+@inject web_bhContext dbContext
+@{
+    ViewData["Title"] = @Model?.Title;
+}
+@section css {
+<link rel="stylesheet" href="~/css/productDetails.css">
+}
+@section Scripts {
+<script src="~/js/productDetails.js"></script>
+}
+<div class="main">
+    <div class="left">
+        <div class="list__img">
+        @{
+            var listImg = from a in dbContext.Galleries.ToList()
+                        where a.IdProduct == @Model?.Id select a.Thumbnail;
+            <img src="~/img/product/@Model?.Thumbnail" alt="Ảnh @Model?.Title" onclick="getImg(this)">
+            foreach (var item in listImg)
+            {
+                string urlImg = item.ToString();
+                <img src="~/img/product/@urlImg" alt="Ảnh @Model?.Title" onclick="getImg(this)">
+            }
+        }
+        </div>
+        <img id="img_main" src="~/img/product/@Model?.Thumbnail" alt="Ảnh @Model?.Title">
+    </div>
+    <div class="right">
+        <div class="path">
+            <a asp-controller="Home" asp-action="Index">Trang chủ </a>
+            <a asp-controller="Product" asp-action="Index">| Sản phẩm </a>
+            <a href="/Product?id=@ViewBag.cate.Id">| @ViewBag.cate.Name</a>
+        </div>
+        <h1>@Model?.Title</h1>
+    @if(Model?.Quantity == 0){
+        <h2 style="margin: 10px 0; color: cadetblue;">Hết hàng</h2>
+    }else{
+        <input type="hidden" id="id_product" value="@Model?.Id">
+    }
+        <h3>Giá</h3>
+        <p>@string.Format("{0:0,0}",Model?.Price) VND</p>
+        <h3>Số lượng</h3>
+        <div class="product__quantity">
+            <button onclick="quantityChange(-1)">-</button>
+        @if(Model?.Quantity == 0){
+            <input name="quantity" id="quantity" type="number" value="0" min="0" max="@Model?.Quantity">
+        }else{
+            <input name="quantity" id="quantity" type="number" value="1" min="0" max="@Model?.Quantity">
+        }
+            <button onclick="quantityChange(1)">+</button>
+        </div>
+        <button id="add_to_cart" class="btn btn-green">Thêm vào giỏ hàng</button>
+        <a href="/Cart" class="btn btn-strest">Xem giỏ hàng</a>
+    </div>
+</div>
+<div class="product__info">
+    <div class="tab__list">
+        <button id="btn-description" class="tablinks btn btn-strest" onclick="openTab('description')">Chi tiết sản
+            phẩm</button>
+        <button id="btn-shipping" class="tablinks btn btn-strest" onclick="openTab('shipping')">Thông tin vận
+            chuyển</button>
+    </div>
+    <hr>
+    <div id="description" class="tab__content">
+        <h3>Chi tiết</h3>
+        <p>@Model?.Description</p>
+    </div>
+    <div id="shipping" class="tab__content">
+        <h3>Vận chuyển</h3>
+        <p>Sản phẩm có thể được vận chuyển nhanh ( Có tính phí )</p>
+        <p>Hoặc vận chuyển chậm ( miễn phí )</p>
+    </div>
+    <hr>
+</div>
+<div class="category__item">
+    <h2>Sản phẩm liên quan</h2>
+    <div class="row">
+    @{
+        var listP = (from a in dbContext.Products.ToList()
+                    where a.IdCategory == ViewBag.cate.Id
+                    join b in dbContext.Categories.ToList()
+                    on a.IdCategory equals b.Id
+                    select new{
+                        id = a.Id,
+                        idCate = b.Id,
+                        nameCate = b.Name,
+                        title = a.Title,
+                        price = a.Price,
+                        thumb = a.Thumbnail,
+                        description = a.Description,
+                        quantity = a.Quantity 
+                    }).Take(5).ToList();
+        foreach (var item in listP)
+        {
+        <div class="row__item">
+            <div class="row__item--img">
+                <img src="~/img/product/@item.thumb" alt="Ảnh bàn phím">
+                <div class="product__hover">
+                    <a href="/Product/Details?id=@item.id">Xem</a>
+                    <a><img src="~/img/cart.png" alt=""></a>
+                </div>
+            @if(item.quantity == 0)
+            {
+                <div class="product__over">
+                <a>Hết hàng</a>
+                </div>
+            }
+            </div>
+            <div>
+                <p>@item.nameCate</p>
+                <a href="/Product/Details?id=@item.id">@item.title</a>
+                <h2>@string.Format("{0:0,0}", item.price) VND</h2>
+            </div>
+        </div>
+        }
+    }
+    </div>
+</div>

@@ -1,0 +1,78 @@
+@model web_bh.Models.Product
+
+@{
+    ViewData["Title"] = "Sửa sản phẩm";
+    Layout = "_Layout";
+}
+
+<h1>Chỉnh sửa</h1>
+
+<h4>Sản phẩm</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label for="IdCategory" class="control-label">Danh mục</label>
+                <select asp-for="IdCategory" class="form-control" asp-items="ViewBag.IdCategory"></select>
+                <span asp-validation-for="IdCategory" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="Title" class="control-label">Tên</label>
+                <input asp-for="Title" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="Price" class="control-label">Giá</label>
+                <input asp-for="Price" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Ảnh nền</label>
+                <input type="file" name="file">
+                <input asp-for="Thumbnail" type="hidden" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="Description" class="control-label">Mô tả</label>
+                <input asp-for="Description" class="form-control" />
+            </div>
+            <div class="form-group">
+                <Số for="Quantity" class="control-label">Số lượng</label>
+                <input asp-for="Quantity" min="0" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Lưu" onclick="return checkDataPost();" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Quay lại</a>
+</div>
+
+<script>
+    function checkDataPost(){
+        if( document.getElementById("IdCategory").value == "" ){
+            alert("Danh mục không được để trống!");
+            return false;
+        }
+        if( document.getElementById("Title").value == "" ){
+            alert("Tên không được để trống!");
+            return false;
+        }
+        if( document.getElementById("Price").value == "" ){
+            alert("Giá không được để trống!");
+            return false;
+        }
+        if( document.getElementById("Description").value == "" ){
+            alert("Mô tả không được để trống!");
+            return false;
+        }
+        if( document.getElementById("Quantity").value == "" ){
+            alert("Số lượng không được để trống!");
+            return false;
+        }
+    }
+</script>
+

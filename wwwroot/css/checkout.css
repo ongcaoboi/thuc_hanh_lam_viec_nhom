@@ -1,0 +1,63 @@
+.address {
+  width: 100%;
+  padding: 0  30px;
+}
+.address > h4 {
+  color: slategrey;
+  margin-top: 10px;
+}
+.address > input {
+  margin-top: 5px;
+  width: 90%;
+  height: 40px;
+  font-size: 20px;
+  padding: 5px 10px;
+}
+.address > textarea {
+  margin-top: 5px;
+  width: 90%;
+  height: 110px;
+  font-size: 20px;
+  padding: 5px 10px;
+}
+.cart__bottom {
+  width: 100%;
+  justify-content: space-around;
+}
+.right > table {
+  margin: 0;
+  padding: 0;
+}
+.right table tbody tr td:last-child {
+  padding: 0;
+}
+.payment {
+  margin-bottom: 20px;
+}
+.payment > div {
+  display: flex;
+}
+.payment > div > h4, .payment > p {
+  margin-bottom: 10px;
+  margin-left: 10px;
+}
+.payment > div > input {
+  width: 20px;
+  height: 20px;
+}
+@media (max-width: 768px) {
+  .checkout__header a {
+    width: 100vw;
+  }
+  .cart__bottom {
+    margin-top: 0;
+    margin-bottom: 40px;
+  }
+  .right {
+    margin: 50px 0;
+    padding: 0 10px;
+  }
+  .address {
+    padding: 10px;
+  }
+}

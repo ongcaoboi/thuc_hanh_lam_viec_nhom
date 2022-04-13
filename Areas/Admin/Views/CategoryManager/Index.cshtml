@@ -1,0 +1,46 @@
+@model IEnumerable<web_bh.Models.Category>
+
+@{
+    ViewData["Title"] = "Danh sách danh mục";
+    Layout = "_Layout";
+}
+
+<h1>Danh sách danh mục</h1>
+
+<div style="display: flex; justify-content: space-between;">
+    <p>
+        <a asp-action="Create" class="btn btn-success">Tạo mới</a>
+    </p>
+    <form asp-action="Index" style="display: flex; justify-content: space-between;">
+        <input type="search" class="form-control" value="" placeholder="Nhập tên" name="q">
+        <div class="m-2"></div>
+        <input type="submit" value="Tìm" class="btn btn-primary">
+    </form>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @* @Html.DisplayNameFor(model => model.Name) *@
+                <p>Tên</p>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                <h5>
+                @Html.DisplayFor(modelItem => item.Name)
+                </h5>
+            </td>
+            <td>
+                <a asp-action="Edit" class="btn btn-primary" asp-route-id="@item.Id">Sửa</a>
+                <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">Chi tiết</a>
+                <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id">Xoá</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

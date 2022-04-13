@@ -1,0 +1,16 @@
+@{
+    ViewData["Title"] = "Hoàn thành";
+}
+@section css {
+<link rel="stylesheet" href="~/css/completeCheckout.css">
+}
+<h1>
+    <img src="~/img/check_complete.png" alt="">
+    <p>QUÝ KHÁCH ĐÃ ĐẶT HÀNG THÀNH CÔNG</p>
+</h1>
+<h3>
+    <p>Cảm ơn quý khách đã đặt mua sản phẩm của chúng tôi !</p>
+    <p>Đơn hàng của quý khách sẽ được nhân viên kiểm tra và giao hàng trong thời gian sớm nhất.</p>
+</h3>
+<a asp-controller="MyOrder" asp-action="Index">Xem đơn hàng</a>
+<a asp-controller="Product" asp-action="Index">Tiếp tục mua sắm</a>

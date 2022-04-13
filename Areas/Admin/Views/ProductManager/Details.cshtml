@@ -1,0 +1,99 @@
+@model web_bh.Models.Product
+
+@{
+    ViewData["Title"] = "Chi tiết sản phẩm";
+    Layout = "_Layout";
+}
+
+<h1>Chi tiết</h1>
+
+<div>
+    <h4>Sản phẩm</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @* @Html.DisplayNameFor(model => model.Title) *@
+            <p>Tên</p>
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class = "col-sm-2">
+            @* @Html.DisplayNameFor(model => model.Price) *@
+            <p>Giá</p>
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt class = "col-sm-2">
+            @* @Html.DisplayNameFor(model => model.Thumbnail) *@
+            <p>Ảnh nền</p>
+        </dt>
+        <dd class = "col-sm-10">
+            <img style="width: 150px;" src="~/img/product/@Html.DisplayFor(model => model.Thumbnail)" alt="Hình ảnh @Html.DisplayFor(model => model.Title)">
+            <div>
+                <h4>Ảnh phụ thuộc!</h4>
+                <div style="display: flex; flex-wrap: wrap;">
+                @foreach (var item in ViewBag.galleries)
+                {
+                    <form asp-action="RemovePicture">
+                        <img style="width: 150px;" src="~/img/product/@item.Thumbnail" alt="Hình ảnh @Html.DisplayFor(model => model.Title)">
+                        <input type="hidden" name="id" value="@Model?.Id">
+                        <input type="hidden" name="idGallery" value="@item.Id">
+                        <input type="submit" class="btn btn-danger" value="Xoá" onclick="return isDelete();">
+                    </form>
+                }
+                </div>
+            </div>
+            
+            <form asp-action="AddPicture" enctype="multipart/form-data">
+                <h4>Thêm ảnh phụ thuộc!</h4>
+                <input type="hidden" name="idProduct" value="@Model?.Id">
+                <input type="file" name="file" id="file">
+                <input type="submit" value="Tải ảnh lên" class="btn btn-success" onclick="return checkDataPost();">
+            </form>
+        </dd>
+        <dt class = "col-sm-2">
+            @* @Html.DisplayNameFor(model => model.Description) *@
+            <p>Mô tả</p>
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            @* @Html.DisplayNameFor(model => model.Quantity) *@
+            <p>Số lượng</p>
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+        <dt class = "col-sm-2">
+            @* @Html.DisplayNameFor(model => model.IdCategoryNavigation) *@
+            <p>Danh mục</p>
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IdCategoryNavigation.Name)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-info" >Sửa</a> |
+    <a asp-action="Index">Quay lại</a>
+</div>
+<script>
+    function isDelete(){
+        return confirm("Bạn chắc chắn muốn xoá!");
+    }
+    
+    function checkDataPost(){
+        
+        if ($('#file').get(0).files.length === 0) {
+            alert("File ảnh không được để trống!");
+            return false;
+        }
+        if( document.getElementById("IdCategory").value == "" ){
+            alert("Danh mục không được để trống!");
+            return false;
+        }
+    }
+</script>

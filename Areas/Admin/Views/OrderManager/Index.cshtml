@@ -1,0 +1,164 @@
+@model List<web_bh.Models.Order>
+@{
+    ViewData["Title"] = "Danh sách đơn hàng";
+    Layout = "_Layout";
+    int count = 1;
+}
+<link rel="stylesheet" href="~/css/AdminOrder.css">
+
+<h1>Danh sách đơn hàng</h1>
+
+<div class="container__body">
+    <table>
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>HỌ TÊN</th>
+                <th>SĐT</th>
+                <th>Địa chỉ</th>
+                <th>TỔNG TIỀN</th>
+                <th>THANH TOÁN</th>
+                <th>TRẠNG THÁI</th>
+                <th>HÌNH THỨC</th>
+                <th>NGÀY TẠO</th>
+                <th>CHI TIẾT</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.ToList())
+        {
+            int total = 0;
+            foreach (var item_1 in item.OrderDetails.ToList())
+            {
+                total += (int)item_1.TotalMoney;
+            }
+            <tr class="oder-item">
+                <td>@count</td>
+                <td>@item.FullName</td>
+                <td>@item.PhoneNumber</td>
+                <td>@item.Address</td>
+                <td>
+                    <p>@string.Format("{0:0,0}", total)</p>
+                    <p> VND</p>
+                </td>
+                <td>Thanh toán khi nhận hàng</td>
+                <td>
+                    <select id="select-@item.Id" onchange="changeStatus(@item.Id)">
+                @foreach (var item_2 in ViewBag.status)
+                {
+                    if(item_2.Id == item.IdStatus)
+                    {
+                        <option value="@item_2.Id" selected>@item_2.Status1</option>
+                    }else
+                    {
+                        <option value="@item_2.Id">@item_2.Status1</option>
+                    }
+                }
+                    </select>
+                </td>
+                <td>Giao hàng miễn phí</td>
+                <td>@item.OrderDate</td>
+                <td>
+                    <button class="btn btn-strest" onclick="showOrderDetails(@item.Id)">>></button>
+                </td>
+            </tr>
+            count++;
+        }
+        </tbody>
+    </table>
+    @if(!Model.Any()){
+        <h3 style="margin: 10px;">Không có đơn hàng nào!</h3>
+    }
+</div>
+@foreach (var item_3 in Model.ToList())
+{
+int total_ = 0;
+
+<div class="order__details" id="order-details-@item_3.Id">
+    <button class="btn btn-strest order__details--close" onclick="hideOrderDetails()">x</button>
+    <h2>HOÁ ĐƠN MUA HÀNG</h2>
+    <div>
+        <div>
+            <p>Địa chỉ người nhận</p>
+            <p>Họ tên: @item_3.FullName</p>
+            <p>Địa chỉ: @item_3.Address</p>
+            <p>SĐT: @item_3.PhoneNumber</p>
+        </div>
+        <div>
+            <p>Thanh toán khi nhận hàng</p>
+            <p>Giao hàng miễn phí</p>
+            <p>Ngày giao hàng: @item_3.OrderDate.AddDays(10)</p>
+            <p>Ghi chú: @item_3.Note</p>
+        </div>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tên sản phẩm</th>
+                <th>Số lượng</th>
+                <th>Tổng tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+    @{
+        int stt = 1;
+        foreach (var item_4 in item_3.OrderDetails.ToList())
+        {
+            string name = "";
+            foreach (var item_5 in ViewBag.product)
+            {
+                if(item_4.IdProduct == item_5.Id)
+                {
+                    name = item_5.Title;
+                    break;
+                }
+            }
+            <tr class="oder-item">
+                <td>@stt</td>
+                <td>@name</td>
+                <td>@item_4.Num</td>
+                <td>@string.Format("{0:0,0}", item_4.TotalMoney) VND</td>
+            </tr>
+            total_ += (int)item_4.TotalMoney;
+            stt++;       
+        }
+    }
+        </tbody>
+    </table>
+    <h4>Ngày đặt hàng: @item_3.OrderDate</h4>
+    <h3>Số tiền phải trả: @string.Format("{0:0,0}", total_) VND</h3>
+
+</div>
+}
+
+<script src="~/js/myOrder.js"></script>
+<script>
+    function changeStatus(idOrder){
+        var isChane = confirm("Bạn có chắc muốn thay đổi trạng thái đơn hàng này!");
+        var idStatus = $('#select-'+idOrder).val();
+        if(idStatus == "" || idStatus == null || idStatus === undefined){
+            alert("Lỗi!");
+            return;
+        }
+        if(isChane){
+            $.ajax({
+                url : '/Admin/OrderManager/ChangeStatus',
+                type : 'post',
+                data : {
+                    idOrder : idOrder,
+                    idStatus : idStatus
+                },
+                success : function(result){
+                    alert(result.message);
+                    if(result.position == "1"){
+                        location.reload();
+                    }
+                },
+                error : function(){
+                    alert('Failed to receive the Data');
+                }
+            })
+        }
+    }
+</script>

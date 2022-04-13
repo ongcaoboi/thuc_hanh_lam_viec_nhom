@@ -1,0 +1,59 @@
+.container {
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+.container .path {
+	width: 100%;
+  padding: 40px 50px;
+}
+.container .path a {
+  text-decoration: none;
+  font-size: 18px;
+}
+.container .left {
+	width: 25%;
+  padding: 10px 0px 40px 50px;
+}
+.left__item {
+  display: flex;
+  flex-direction: column;
+}
+.left__item > a {
+  padding: 10px 0px 10px 20px;
+  text-decoration: none;
+}
+.left__item > a:hover {
+  background-color: #1bc323;
+}
+.container .main {
+	width: 75%;
+}
+.container  .page {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+}
+.container .page a {
+  text-decoration: none;
+  font-size: 18px;
+  padding: 5px 10px;
+  font-weight: bold;
+}
+.container .page a:hover {
+  background-color: #1bc323;
+}
+.page__active a {
+  background-color: #1bc323;
+}
+.container .page > div {
+  display: flex;
+}
+@media (max-width: 768px) {
+  .container .left, .container .main {
+    width: 100%;
+  }
+  .container .path, .container .left {
+    padding: 20px;
+  }
+}

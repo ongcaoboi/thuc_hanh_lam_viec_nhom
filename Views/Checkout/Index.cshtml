@@ -1,0 +1,89 @@
+@{
+    ViewData["Title"] = "Thanh toán";
+}
+@section css {
+<link rel="stylesheet" href="~/css/cart.css">
+<link rel="stylesheet" href="~/css/checkout.css">
+}
+@section Scripts {
+<script src="~/js/checkout.js"></script>
+}
+<div class="path">
+    <a asp-controller="Home" asp-action="Index">Trang chủ </a>
+    <a asp-controller="Checkout" asp-action="Index">| Thanh toán </a>
+</div>
+<div class="cart">
+    <div class="checkout__body address">
+        <h3>ĐỊA CHỈ ĐƠN HÀNG</h3>
+        <h4>Họ tên</h4>
+        <input type="text" id="fullName" placeholder="Họ và tên">
+        <h4>Địa chỉ</h4>
+        <input type="text" id="address" placeholder="Địa chỉ">
+        <h4>Số điện thoại</h4>
+        <input type="text" id="phone" placeholder="Số điện thoại">
+        <h4>Lời nhắn</h4>
+        <textarea name="" id="note" cols="30" rows="10"></textarea>
+    </div>
+</div>
+<div class="right">
+    <h3>HÌNH THỨC VẬN CHUYỂN</h3>
+    <div class="checkout__body payment">
+        <div>
+            <input type="radio" name="shipping_" value="1" disabled>
+            <h4> Vận chuyển nhanh ( 40,000 VND) (3-5 ngày) (hướng phát triển)</h4>
+        </div>
+        <div>
+            <input type="radio" name="shipping_" value="2" checked>
+            <h4> Vận chuyển miễn phí ( 0 VND) ( 10-15 ngày)</h4>
+        </div>
+    </div>
+    <h3>HÌNH THỨC THANH TOÁN</h3>
+    <div class="checkout__body payment">
+        <div>
+            <input type="radio" name="payment_" value="1" checked>
+            <h4> Thanh toán khi nhận hàng</h4>
+        </div>
+        <div>
+            <input type="radio" name="payment_" value="2" disabled>
+            <h4> Thanh toán online (hướng phát triển)</h4>
+        </div>
+    </div>
+    <h3>CHI PHÍ ĐƠN HÀNG</h3>
+    <table>
+        <tbody>
+            <tr>
+                <td>Giá trị đơn hàng</td>
+                <td>
+                    <p id="sum-price">@ViewBag.price</p>
+                    <p> VND</p>
+                </td>
+            </tr>
+            <tr>
+                <td>Phí vận chuyển</td>
+                <td>
+                    <p id="shipping-price">0</p>
+                    <p> VND</p>
+                </td>
+            </tr>
+            <tr>
+                <td>Thuế</td>
+                <td>
+                    <p id="tax">0</p>
+                    <p>%</p>
+                </td>
+            </tr>
+            <tr>
+                <td>Tổng chi phí</td>
+                <td>
+                    <p id="price">@ViewBag.price</p>
+                    <p> VND</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="cart__bottom">
+    <a asp-controller="Cart">
+        << Quay lại</a>
+            <a id="complate">Hoàn thành ></a>
+</div>

@@ -1,0 +1,27 @@
+.container {
+  text-align: center !important;
+}
+.container > h1 {
+  padding: 50px 0;
+  display: flex;
+  justify-content: center;
+}
+.container > h1 > img {
+  width: 35px;
+  height: 35px;
+  margin-right: 10px;
+}
+.container > a {
+  margin: 20px 0;
+  width: 200px;
+  display: inline-block;
+  text-decoration: none;
+  padding: 10px;
+  color: #ddd;
+  border: none;
+  background-color: green;
+  font-size: 18px;
+}
+.container > a:hover {
+  background-color: #1bc323;
+}

@@ -1,0 +1,50 @@
+
+.slider {
+  position: relative;
+  padding: 0;
+}
+.slider > img{
+  width: 100%;
+  padding: 0;
+}
+.slider > a:hover {
+  background-color: #1bc323;
+}
+.slider__text {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-decoration: none;
+  background-color: transparent;
+  border: 2px solid snow;
+  font-size: 20px;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+.news {
+  margin: 100px 0;
+  padding-bottom: 20px;
+}
+.news > h2 {
+  text-align: center;
+}
+.row {
+	justify-content: center;
+}
+.category__item {
+	position: relative;
+	text-align: center;
+  padding-bottom: 30px;
+  margin-bottom: 100px;
+}
+.category__item > a {
+	position: absolute;
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: bold;
+  color: rgb(23, 155, 82);
+	right: 10%;
+	bottom: 0;
+}

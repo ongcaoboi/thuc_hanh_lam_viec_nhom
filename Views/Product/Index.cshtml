@@ -1,0 +1,168 @@
+@inject web_bhContext dbContext
+@{
+    List<Category> catergory_ls = dbContext.Categories.ToList();
+}
+@section css {
+    <link rel="stylesheet" href="~/css/product.css">
+}
+@section Scripts {
+    <script src="~/js/product.js"></script>
+}
+<div class="path">
+    <a asp-controller="Home" asp-action="Index">Trang chủ | </a>
+    <a asp-controller="Product" asp-action="Index">Sản phẩm </a>
+    @if(ViewBag.IsCate != 0){
+        if(ViewBag.IsSearch == 1)
+        {
+            var nd = ViewData["Title"];
+    <a href="/Product/Search?q=@nd">| @ViewData["Title"]</a>
+        }else
+        {
+    <a href="/Product?id=@ViewBag.IsCate">| @ViewData["Title"]</a>
+        }
+    }else{
+    <a href="/Product">| Tất cả</a>
+    }
+</div>
+<div class="left">
+    <div class="left_category">
+        <div class="left__item">
+        @foreach (var item in catergory_ls)
+        {
+            <a href="/Product?id=@item.Id">
+                <span>@item.Name</span>
+            </a>
+        }
+        </div>
+    </div>
+</div>
+<div class="main">
+    <div class="row">
+    @if(ViewBag.sl == 0)
+    {
+        <h2>
+            Không có sản phẩm nào!
+        </h2>
+    }
+    else
+    foreach (var item in ViewBag.ls_product)
+    {
+        <div class="row__item">
+            <div class="row__item--img">
+                <img src="~/img/product/@item.thumb" alt="Ảnh bàn phím">
+                <div class="product__hover">
+                    <a href="/Product/Details?id=@item.id">Xem</a>
+                    <a><img src="~/img/cart.png" alt=""></a>
+                </div>
+            @if(item.quantity == 0)
+            {
+                <div class="product__over">
+                <a>Hết hàng</a>
+                </div>
+            }
+            </div>
+            <div>
+                <p>@item.nameCate</p>
+                <a href="/Product/Details?id=@item.id">@item.title</a>
+                <h2>@String.Format("{0:0,0}", @item.price) VND</h2>
+            </div>
+        </div>
+    }
+    </div>
+@if(ViewBag.sl != 0){        
+    <div class="page">
+        <div class="page__prev">
+    @if(ViewBag.page != 1)
+    {
+            <div class="page__item">
+            @if(ViewBag.IsSearch == 1)
+            {
+                var nd = @ViewData["Title"];
+                <a href="/Product/Search?q=@(nd)&p=@(ViewBag.page - 1)">prev</a>
+            }
+            else 
+            {
+                if(ViewBag.IsCate != 0)
+                {
+                    <a href="/Product?id=@(ViewBag.IsCate)&p=@(ViewBag.page - 1)">next</a>
+                }
+                else
+                {
+                    <a href="/Product?p=@(ViewBag.page - 1)">prev</a>
+                }
+            } 
+            </div>
+    }
+        </div>
+        <div class="page__num">
+    @for(int i = 1; i <= ViewBag.num_page; i++)
+    {
+        if(i == ViewBag.page)
+        {
+            <div class="page__item page__active">
+            @if(ViewBag.IsSearch == 1)
+            {
+                var nd = @ViewData["Title"];
+                <a href="/Product/Search?q=@(nd)&p=@i">@i</a>   
+            }
+            else
+            {
+                if(ViewBag.IsCate != 0)
+                {
+                    <a href="/Product?id=@(ViewBag.IsCate)&p=@i">@i</a>
+                }
+                else
+                {
+                    <a href="/Product?p=@i">@i</a>
+                }
+            }
+            </div>
+        }else
+        {
+            <div class="page__item">
+            @if(ViewBag.IsSearch == 1)
+            {
+                var nd = @ViewData["Title"];
+                <a href="/Product/Search?q=@(nd)&p=@i">@i</a>   
+            }
+            else
+            {
+                if(ViewBag.IsCate != 0)
+                {
+                    <a href="/Product?id=@(ViewBag.IsCate)&p=@i">@i</a>
+                }
+                else
+                {
+                    <a href="/Product?p=@i">@i</a>
+                }
+            }
+            </div>
+        }
+    }
+        </div>
+        <div class="page__prev">
+    @if(ViewBag.page != ViewBag.num_page)
+    {
+        <div class="page__item">
+            @if(ViewBag.IsSearch == 1)
+            {
+                var nd = @ViewData["Title"];
+                <a href="/Product/Search?q=@(nd)&p=@(ViewBag.page + 1)">next</a>
+            }
+            else 
+            {
+                if(ViewBag.IsCate != 0)
+                {
+                    <a href="/Product?id=@(ViewBag.IsCate)&p=@(ViewBag.page + 1)">next</a>
+                }
+                else
+                {
+                    <a href="/Product?p=@(ViewBag.page + 1)">next</a>
+                }
+            }
+        </div>
+    }
+        </div>
+    </div>
+}
+</div>

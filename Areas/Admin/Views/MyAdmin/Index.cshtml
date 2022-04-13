@@ -1,0 +1,40 @@
+@{
+    ViewData["Title"] = "Trang quản trị";
+    Layout = "_Layout";
+    int namDau = 2021;
+    int namCuoi = Convert.ToInt32(DateTime.Now.ToString("yyyy"));
+    int thangHienTai = Convert.ToInt32(DateTime.Now.ToString("MM"));
+
+}
+@section Scripts {
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="~/js/thongke.js"></script>
+}
+<h2>Đây là trang quản trị dành riêng cho admin!</h2>
+
+<div>
+    <select name="thang" id="thang" onchange="changeData()">
+        @for(int i = 1; i <= 12; i++){
+            if(i == thangHienTai){
+                <option value="@i" selected>Thang @i</option>
+            }else{
+                <option value="@i">Thang @i</option>
+            }
+        } 
+    </select>
+    <select name="nam" id="nam" onchange="changeData()">
+        
+        @for(int i = namDau; i <= namCuoi; i++){
+        if(i == namCuoi){
+          
+        <option value="@i" selected>Nam @i</option>
+        }else{
+        
+        <option value="@i">Nam @i</option>
+        }
+        } 
+    </select>
+    <div id="div_chart">
+        <canvas id="myChart"></canvas>
+    </div>
+</div>

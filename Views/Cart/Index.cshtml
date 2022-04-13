@@ -1,0 +1,121 @@
+@model List<web_bh.Models.Product>
+@{
+    ViewData["Title"] = "Giỏ hàng";
+    int count = 1;
+}
+@section css {
+<link rel="stylesheet" href="~/css/cart.css">
+}
+@section Scripts {
+<script src="~/js/cart.js"></script>
+}
+<div class="path">
+    <a asp-controller="Home" asp-action="Index">Trang chủ </a>
+    <a asp-controller="Cart" asp-action="Index">| Giỏ hàng </a>
+</div>
+<div class="cart">
+    <div class="cart__body">
+        <table>
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Sản phẩm</th>
+                    <th>Giá</th>
+                    <th>Số lượng</th>
+                    <th>Tổng</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="cart-body">
+            @foreach (var item_ in Model?.ToList())
+            {
+                int sl = 1;
+                foreach(var item in ViewBag.cart)
+                {
+                    if(item.id_product == item_.Id)
+                    {
+                        sl = item.quantity;
+                    }
+                }
+                <tr id="item-@count">
+                    <td>@count</td>
+                    <td class="cart__product">
+                        <img src="~/img/product/@item_.Thumbnail" alt="">
+                        <a href="/Product/Details?id=@item_.Id" style=" overflow-x: hidden;">@item_.Title</a>
+                    </td>
+                    <td>
+                        <p id="price-item-@count">@string.Format("{0:0,0}", item_.Price)</p>
+                        <p> VND</p>
+                    </td>
+                    <td class="cart__quantity">
+                        <div class="product__quantity">
+                            <button class="btn btn-strest" onclick="quantity(@count, -1, @item_.Id)">-</button>
+                            <input name="quantity" id="quantity-@count" type="number" value="@sl" min="0" max="@item_.Quantity">
+                            <button class="btn btn-strest" onclick="quantity(@count, 1, @item_.Id)">+</button>
+                        </div>
+                    </td>
+                    <td>
+                        <p id="sum-item-@count"></p>
+                        <p> VND</p>
+                    </td>
+                    <td>
+                        <button class="btn btn-strest" onclick="removeCartItem(@count, @item_.Id)">x</button>
+                    </td>
+                </tr>
+
+                count = count + 1;
+            }
+            </tbody>
+        </table>
+        @if(!Model.Any()){
+            <p style="margin: 10px;">Không có sản phẩm nào trong giỏ hàng của bạn!
+                <a href="/Product">Bấm vào đây để xem thêm sản phẩm!</a>
+            </p>
+        }
+        <p id="numArr" hidden="hidden">@count</p>
+    </div>
+    <div class="cart__bottom">
+        <a asp-controller="Product" asp-action="Index"><< Tiếp tục mua hàng</a>
+    @if(!Model.Any()){
+        <a style="cursor: not-allowed;">Thanh toán ></a>
+    }else{
+        <a asp-controller="Checkout" asp-action="Index" id="checkout">Thanh toán ></a>
+    }
+    </div>
+</div>
+<div class="right">
+    <h3>TÓM TẮT ĐƠN HÀNG</h3>
+    <h4>Chi phí đơn hàng = Giá trị đơn hàng + phí vận chuyển + Thuế</h4>
+    <table>
+        <tbody>
+            <tr>
+                <td>Giá trị đơn hàng</td>
+                <td>
+                    <p id="sum-price"></p>
+                    <p> VND</p>
+                </td>
+            </tr>
+            <tr>
+                <td>Phí vận chuyển miễn phí</td>
+                <td>
+                    <p id="shipping-price">0</p>
+                    <p> VND</p>
+                </td>
+            </tr>
+            <tr>
+                <td>Thuế</td>
+                <td>
+                    <p id="tax">0</p>
+                    <p>%</p>
+                </td>
+            </tr>
+            <tr>
+                <td>Tổng chi phí</td>
+                <td>
+                    <p id="price"></p>
+                    <p> VND</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

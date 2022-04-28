@@ -82,7 +82,7 @@ public void DownloadExcel(int id)
         // File name của Excel này là Tên đơn hàng
 Response.AddHeader("Content-Disposition", "attachment; filename=" + "Name" + ".xlsx");
         // Lưu file excel của chúng ta như 1 mảng byte để trả về response
-        object p = Response.BinaryWrite(Ep.GetAsByteArray());
+        Response.BinaryWrite(Ep.GetAsByteArray());
         Response.End();
     }
     public IActionResult Index()

@@ -129,6 +129,39 @@ int total_ = 0;
     </table>
     <h4>Ngày đặt hàng: @item_3.OrderDate</h4>
     <h3>Số tiền phải trả: @string.Format("{0:0,0}", total_) VND</h3>
-
+    @if(item_3.IdStatus == 1){
+        <input style="position: absolute; right: 30px; bottom: 110px; cursor: pointer; background-color: red; color: #fff;" type="button" onclick="cancelOrder(@item_3.Id)" value="Hủy đơn">
+    }
+    <form style="position: absolute; right: 30px; bottom: 60px; cursor: pointer;" action="MyOrder/ExportToCSV" method="get">
+        <input type="hidden" name="num" value="@item_3.Id">
+        <input style="background-color: #1bc323; color: #fff;" type="submit" value="Export csv">
+    </form>
+    <form style="position: absolute; right: 30px; bottom: 30px; cursor: pointer;" action="MyOrder/DownloadExcel" method="get">
+        <input type="hidden" name="num" value="@item_3.Id">
+        <input style="background-color: #1bc323; color: #fff;" type="submit" value="Export Excel">
+    </form>
 </div>
 }
+<script>
+    function cancelOrder(idOrder){
+        var isChane = confirm("Bạn thật sự muốn hủy đơn hàng này!");
+        if(isChane){
+            $.ajax({
+                url : '/MyOrder/CancelOrder',
+                type : 'post',
+                data : {
+                    idOrder : idOrder
+                },
+                success : function(result){
+                    alert(result.message);
+                    if(result.position == "1"){
+                        location.reload();
+                    }
+                },
+                error : function(){
+                    alert('Failed to receive the Data');
+                }
+            })
+        }
+    }
+</script>

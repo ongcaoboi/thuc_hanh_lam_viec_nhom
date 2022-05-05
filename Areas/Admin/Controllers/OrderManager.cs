@@ -40,13 +40,38 @@ namespace web_bh.Areas_Admin_Controllers
                         position = "0"
                     });
                 }
-                Order order = _context.Orders.Where(p => p.Id == idOrder).FirstOrDefault();
+                Order order = _context.Orders.Where(q => q.Id == idOrder).Include(x => x.OrderDetails.OrderBy(p => p.Id)).First();
                 if(order == null)
                 {
                     return Json(new {
                         message = "Đơn hàng không tồn tại!",
                         position = "0"
                     });
+                }
+                if(order.IdStatus == 4){
+                    return Json(new {
+                        message = "Đơn hàng đã bị hủy rồi!",
+                        position ="0"
+                    });
+                }
+                if(idStatus == 4){
+                    bool isError = false;
+                    foreach (OrderDetail item in order.OrderDetails)
+                    {
+                        Product product = _context.Products.Where(p => p.Id == item.IdProduct).First();
+                        if(product == null){
+                            isError = true; 
+                            break;  
+                        }
+                        product.Quantity += Int32.Parse(item.Num.ToString());
+                        _context.Update(product);
+                    }
+                    if(isError){
+                        return Json(new {
+                            message = "Có lỗi xảy ra, vui lòng thử lại sau!",
+                            position = "0"
+                        });
+                    }
                 }
                 order.IdStatus = status.Id;
                 _context.Update(order);
